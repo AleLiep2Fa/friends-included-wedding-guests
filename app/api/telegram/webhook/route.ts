@@ -28,7 +28,10 @@ export async function POST(request: Request) {
 
   const { repo, transactions } = service();
   const linked = await repo.getEmployeeByTelegramUserId(String(userId));
-  if (!linked) { await reply(chatId, "Your Telegram account is not linked to a fictional employee. Ask Svetlana to link it in the manager screen."); return NextResponse.json({ ok: true }); }
+  if (!linked) {
+    await reply(chatId, `Your Telegram account is not linked to a fictional employee. Your Telegram user ID is ${userId} and this chat ID is ${chatId}. Ask Svetlana to link them in the manager screen.`);
+    return NextResponse.json({ ok: true });
+  }
 
   const command = parseTelegramCommand(text);
   if (command.kind === "INVALID") { await reply(chatId, command.error); return NextResponse.json({ ok: true }); }
