@@ -40,8 +40,10 @@ describe("local integration safeguards", () => {
     expect(telegramWebhookEnabled({ TELEGRAM_LIVE_ENABLED: "true", TELEGRAM_BOT_TOKEN: "token", TELEGRAM_WEBHOOK_SECRET: "secret" })).toBe(true);
   });
 
-  it("keeps the expense-submission migration's overhead value typed as the database enum", () => {
-    const migration = readFileSync(new URL("../supabase/migrations/202610040006_cast_overhead_expense_allocation.sql", import.meta.url), "utf8");
+  it("keeps expense-submission CASE expressions typed as their database enums", () => {
+    const migration = readFileSync(new URL("../supabase/migrations/202610040007_cast_expense_status.sql", import.meta.url), "utf8");
     expect(migration).toContain("'OVERHEAD'::public.expense_allocation");
+    expect(migration).toContain("'ALLOCATED'::public.expense_status");
+    expect(migration).toContain("'AWAITING_ALLOCATION'::public.expense_status");
   });
 });
