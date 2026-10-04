@@ -13,7 +13,7 @@ This checklist is intentionally not an authorization to perform any action. It r
 ## Google Sheets: remaining authorized-live test
 
 1. Set `GOOGLE_SHEETS_SPREADSHEET_ID` and `GOOGLE_SERVICE_ACCOUNT_JSON` as server-side local or Vercel secrets; do not paste the JSON in chat or source code.
-2. Create the required temporary `SYNC-CHECK-001` sale through the running application and confirm that `Sales!A1:Q1` contains the required headers and the new reference appears on row 2. The defined control-reference pattern is deliberately supported by the shared validation and database constraint.
+2. Create the required temporary `SYNC-CHECK-001` sale through the running application and confirm that `Sales!A1:Q1` contains the required headers and the new reference appears on row 2. The defined control-reference pattern is deliberately supported by the shared validation, database constraint, and submission RPC.
 3. Approve or correct that same sale and confirm that the same reference row changes rather than a second row appearing.
 4. Create an expense and confirm the equivalent behavior in `Expenses`.
 5. Temporarily make a non-destructive Sheets failure only if separately approved, then use the manager retry and confirm the financial totals stay unchanged while the existing row updates.

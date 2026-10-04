@@ -12,7 +12,7 @@ returns uuid language plpgsql security definer set search_path = public as $$
 declare v_id uuid; v_reference text := upper(trim(p_value->>'reference'));
 begin
   perform assert_actor_role(p_actor, 'SALESPERSON');
-  if v_reference !~ '^[A-Z][0-9]{2,}$' then raise exception 'Invalid transaction reference'; end if;
+  if v_reference !~ '^(?:[A-Z][0-9]{2,}|SYNC-CHECK-[0-9]{3,})$' then raise exception 'Invalid transaction reference'; end if;
   insert into transactions(reference, kind, source, submitter_id, originating_telegram_chat_id)
   values(v_reference, 'SALE', p_source, p_actor, p_chat_id) returning id into v_id;
   insert into sales(transaction_id, customer, project, description, amount_cents, proposed_richard_bps, proposed_anastasia_bps, proposed_jean_claude_bps)
@@ -26,7 +26,7 @@ returns uuid language plpgsql security definer set search_path = public as $$
 declare v_id uuid; v_reference text := upper(trim(p_value->>'reference')); v_allocation public.expense_allocation := (p_value->>'proposedAllocation')::public.expense_allocation;
 begin
   perform assert_actor_role(p_actor, 'EXPENSE_REPORTER');
-  if v_reference !~ '^[A-Z][0-9]{2,}$' then raise exception 'Invalid transaction reference'; end if;
+  if v_reference !~ '^(?:[A-Z][0-9]{2,}|SYNC-CHECK-[0-9]{3,})$' then raise exception 'Invalid transaction reference'; end if;
   insert into transactions(reference, kind, source, submitter_id, originating_telegram_chat_id)
   values(v_reference, 'EXPENSE', p_source, p_actor, p_chat_id) returning id into v_id;
   insert into expenses(transaction_id, description, category, amount_cents, proposed_allocation, final_allocation, status)
