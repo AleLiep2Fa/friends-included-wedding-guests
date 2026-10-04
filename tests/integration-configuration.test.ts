@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import { googleSheetsConfiguration, googleSheetsUpsertPlan } from "@/lib/google-sheets-config";
 import { parseTelegramCommand, telegramUsage } from "@/lib/telegram-command";
 import { telegramDeliveryEnabled, telegramWebhookEnabled } from "@/lib/telegram-config";
@@ -37,5 +38,10 @@ describe("local integration safeguards", () => {
     expect(telegramDeliveryEnabled({ TELEGRAM_LIVE_ENABLED: "true" })).toBe(false);
     expect(telegramWebhookEnabled({ TELEGRAM_LIVE_ENABLED: "true", TELEGRAM_BOT_TOKEN: "token" })).toBe(false);
     expect(telegramWebhookEnabled({ TELEGRAM_LIVE_ENABLED: "true", TELEGRAM_BOT_TOKEN: "token", TELEGRAM_WEBHOOK_SECRET: "secret" })).toBe(true);
+  });
+
+  it("keeps the expense-submission migration's overhead value typed as the database enum", () => {
+    const migration = readFileSync(new URL("../supabase/migrations/202610040006_cast_overhead_expense_allocation.sql", import.meta.url), "utf8");
+    expect(migration).toContain("'OVERHEAD'::public.expense_allocation");
   });
 });
