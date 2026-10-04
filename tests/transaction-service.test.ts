@@ -40,6 +40,12 @@ describe("Friends Included transaction engine", () => {
     expect(() => validateCommissionSplit(split(60, 30, 20))).toThrow("total exactly 100%");
   });
 
+  it("accepts the defined temporary sync-control reference without weakening normal transaction validation", async () => {
+    const system = make();
+    await system.service.submitSale("richard", "WEBSITE", null, sale("SYNC-CHECK-001", "Sync control", "A", 100, split(100, 0, 0), "Temporary Sheets synchronization check"));
+    expect((await system.repo.getRecord("SYNC-CHECK-001"))?.reference).toBe("SYNC-CHECK-001");
+  });
+
   it("keeps pending sales out of income and commissions while every recorded expense affects company result", async () => {
     const system = make();
     await system.service.submitSale("richard", "WEBSITE", null, sale("S01", "Olivia Rose", "A", 100_000));

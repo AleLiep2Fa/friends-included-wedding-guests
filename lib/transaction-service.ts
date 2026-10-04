@@ -14,7 +14,7 @@ export class TransactionService {
   constructor(private readonly repo: TransactionRepository, private readonly sideEffects: SideEffects) {}
   private async actor(actorId: string): Promise<Employee> { const actor = await this.repo.getEmployee(actorId); if (!actor) throw new Error("Unknown demonstration actor."); return actor; }
   private async requireRole(actorId: string, role: Employee["role"]): Promise<Employee> { const actor = await this.actor(actorId); if (actor.role !== role) throw new Error("This fictional role is not permitted to perform that action."); return actor; }
-  private validateReference(reference: string) { if (!/^[A-Z][0-9]{2,}$/u.test(reference)) throw new Error("Use a reference such as S01 or E07."); }
+  private validateReference(reference: string) { if (!/^(?:[A-Z][0-9]{2,}|SYNC-CHECK-[0-9]{3,})$/u.test(reference)) throw new Error("Use a reference such as S01, E07, or SYNC-CHECK-001."); }
   private validateSale(input: SaleInput) {
     this.validateReference(input.reference);
     if (!input.customer.trim() || !input.description.trim()) throw new Error("Customer and description are required.");

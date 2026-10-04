@@ -4,7 +4,7 @@ import type { CommissionSplit } from "@/lib/domain";
 import { validateCommissionSplit } from "@/lib/rules";
 import type { ExpenseInput, SaleInput } from "@/lib/repository";
 
-const reference = z.string().trim().toUpperCase().regex(/^[A-Z][0-9]{2,}$/u, "Use a reference such as S01 or E07.");
+const reference = z.string().trim().toUpperCase().regex(/^(?:[A-Z][0-9]{2,}|SYNC-CHECK-[0-9]{3,})$/u, "Use a reference such as S01, E07, or SYNC-CHECK-001.");
 const text = z.string().trim().min(1, "This field is required.").max(500);
 
 function parseSplit(value: Record<string, unknown>): CommissionSplit {
