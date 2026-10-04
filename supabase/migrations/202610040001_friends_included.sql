@@ -92,7 +92,7 @@ create table public.manager_decisions (
 );
 create table public.commission_calculations (
   id uuid primary key default gen_random_uuid(),
-  sale_transaction_id uuid not null unique references public.sales(transaction_id) on delete cascade,
+  sale_transaction_id uuid not null references public.sales(transaction_id) on delete cascade,
   person_id text not null references public.employees(id) check (person_id in ('richard','anastasia','jean-claude')),
   final_basis_points integer not null check (final_basis_points between 0 and 10000),
   amount_cents bigint not null check (amount_cents >= 0),
